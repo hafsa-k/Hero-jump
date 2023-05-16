@@ -130,7 +130,7 @@ def update(dt):
                 coeurs -= 1
                 if coeurs == 0:
                     lost_game()
-                # perd 1 life direct + invincible 2 secondes
+                # perd 1 life direct + invincible 2 secondes check asteroid
 
 
         if boxes:
