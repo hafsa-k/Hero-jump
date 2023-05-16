@@ -13,14 +13,14 @@ GROUND = 458
 GRAVITY = 200
 
 NUMBER_OF_BACKGROUND = 2
-GAME_SPEED = 100
+GAME_SPEED = 200
 JUMP_SPEED = 200
 
 # hero initialisation
 
 hero = Actor("hero", anchor=('middle', 'bottom'))
 hero.pos = (64, GROUND)
-hero_speed = 0
+hero_speed = 3
 
 # enemies initialisations
 
@@ -50,57 +50,61 @@ game_over = False
 
 # fonction pour déclancher les ECRANS (start, pause, game over)
 def start_game():
-    global game_started
+    global game_started, game_paused, game_over
     game_started = True
+    game_paused = False
+    game_over = False
 
 def pause():
     global game_paused
     game_paused = not game_paused
 
-def lost_game():
+def end_game():
     global game_over
-    game_over = not game_over
+    game_over = True
+
+# def restart_game():
+#     global game_started, game_over
+#     game_started = True
+#     game_over = False
 
 def draw():
     global game_paused, game_started, game_over
     screen.clear()
 
-    if not game_over:
-        if game_started:
-            # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
-            if game_paused:
-                screen.draw.text("Pause", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
-
-            # ECRAN de jeu 
-            else:
-                for bg in backgrounds_bottom:
-                    bg.draw()
-
-                for bg in backgrounds_top:
-                    bg.draw()
-
-                for box in boxes:
-                    box.draw()
-
-                hero.draw()
-
         # ECRAN START: ici mettre un ecran joli
-        else:
-            screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
+    if not game_started:
+        screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
+
+    # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
+    elif game_paused:
+        screen.draw.text("Pause", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
 
     # ECRAN GAME OVER: ici mettre un ecran joli
-    else:
+    elif game_over:
         screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
+    
+    # ECRAN de jeu 
+    else:
+        for bg in backgrounds_bottom:
+            bg.draw()
 
+        for bg in backgrounds_top:
+            bg.draw()
+
+        for box in boxes:
+            box.draw()
+
+        hero.draw()
 
 def update(dt):
 
     # enemies update
     # box
-    global next_box_time, game_paused, game_over
+    global next_box_time, game_started, game_paused, game_over
     
     
-    if not game_over and not game_paused:
+    if game_started and not game_over and not game_paused:
 
         next_box_time -= dt
         if next_box_time <= 0:
@@ -114,7 +118,7 @@ def update(dt):
             x -= GAME_SPEED * dt
             box.pos = x, y
             if box.colliderect(hero):
-                lost_game()
+                end_game()
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
@@ -158,14 +162,18 @@ def update(dt):
 
 
 def on_key_down(key):
-    global hero_speed, game_paused, game_started
+    global hero_speed, game_paused, game_started, game_over
 
     # start and pause the game
     if key == keys.RETURN:
-        start_game()
+        if not game_started:
+            start_game()
+        elif game_over:
+            start_game()
 
     if key == keys.ESCAPE:
-        pause()
+        if game_started:
+            pause()
 
     # jump
     if key == keys.SPACE:
