@@ -1,5 +1,6 @@
 # game data
 
+from pgzhelper import*
 from argparse import Action
 from random import randint
 from tkinter import ANCHOR
@@ -26,6 +27,10 @@ hero_speed = 0
 
 lives = []
 coeurs = 3
+
+# RESIZE LES COEURS ICI HELP HELP ALERT 
+life = Actor("heart_on")
+life.scale = 0.1
 
 for i in range(coeurs):
     life = Actor("heart_on")
