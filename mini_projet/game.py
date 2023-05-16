@@ -22,6 +22,16 @@ hero = Actor("hero", anchor=('middle', 'bottom'))
 hero.pos = (64, GROUND)
 hero_speed = 0
 
+# life initialisation
+
+lives = []
+coeurs = 3
+
+for i in range(coeurs):
+    life = Actor("temporary_life")
+    life.pos = (50*(i+1),50)
+    lives.append(life)
+
 # enemies initialisations
 
 BOX_APPARTION = (2, 5)
@@ -83,6 +93,9 @@ def draw():
                     box.draw()
 
                 hero.draw()
+                
+                for coeur in lives:
+                    coeur.draw()
 
         # ECRAN START: ici mettre un ecran joli
         else:
@@ -97,7 +110,7 @@ def update(dt):
 
     # enemies update
     # box
-    global next_box_time, game_paused, game_over
+    global next_box_time, game_paused, game_over,coeurs
     
     
     if not game_over and not game_paused:
@@ -114,12 +127,17 @@ def update(dt):
             x -= GAME_SPEED * dt
             box.pos = x, y
             if box.colliderect(hero):
-                lost_game()
+                coeurs -= 1
+                if coeurs == 0:
+                    lost_game()
+                # perd 1 life direct + invincible 2 secondes
+
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
                 boxes.pop(0)
 
+        
         # hero update
 
         global hero_speed
