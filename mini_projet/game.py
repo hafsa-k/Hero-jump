@@ -28,8 +28,8 @@ lives = []
 coeurs = 3
 
 for i in range(coeurs):
-    life = Actor("temporary_life")
-    life.pos = (50*(i+1),50)
+    life = Actor("heart_on")
+    life.pos = (90*(i+1),50)
     lives.append(life)
 
 # enemies initialisations
