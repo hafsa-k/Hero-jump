@@ -122,13 +122,8 @@ def update(dt):
 
     # enemies update
     # box
-<<<<<<< HEAD
 
-    global next_box_time, game_started, game_paused, game_over
-    
-=======
     global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer
->>>>>>> bfda0ad1d27d51e3291f70ba2a368dccdce552c1
     
     if game_started and not game_over and not game_paused:
 
