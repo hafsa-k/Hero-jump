@@ -6,7 +6,6 @@ from tkinter import ANCHOR
 import pgzrun
 from pgzhelper import *
 
-
 WIDTH = 800
 HEIGHT = 600
 
@@ -68,7 +67,7 @@ boxes = []
 # dragon initialisation
 
 dragon = Actor("frame-1")
-dragon.pos = (400, 300)
+dragon.pos = (WIDTH + 50, randint (200,500))
 dragon.scale = 0.15
 dragon.images = ["frame-1", "frame-2", "frame-3", "frame-4"]
 dragon.fps = 5
@@ -159,7 +158,9 @@ def update(dt):
     # enemies update
     # box
 
+
     global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer, coeurs
+
 
     if game_started and not game_over and not game_paused:
 
@@ -175,22 +176,24 @@ def update(dt):
             x, y = box.pos
             x -= GAME_SPEED * dt
             box.pos = x, y
-            if box.colliderect(hero) and not invincible:
+            if box.colliderect(hero) or hero.colliderect(dragon) and not invincible:
                 print(coeurs)
                 coeurs -= 1
                 lives.remove(lives[-1])
                 invincible = True
                 invincible_timer = 1
                 if coeurs == 0:
-                    
                     end_game()
-
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
                 boxes.pop(0)
 
         dragon.animate()
+        dragon.x -= (GAME_SPEED * 1.30) * dt
+        if dragon.x <= -40:
+            dragon.x = WIDTH + 40
+            dragon.y = randint (300, 400)
 
         # hero update
 
@@ -250,7 +253,9 @@ def on_key_down(key):
 
     # jump
     if key == keys.SPACE:
+        jumping = True
         if hero_speed <= 0:
             hero_speed = JUMP_SPEED
+                
 
 pgzrun.go()
