@@ -55,7 +55,7 @@ for n in range(NUMBER_OF_BACKGROUND):
     backgrounds_bottom.append(bg_b)
 
     bg_t = Actor("bg_top", anchor=('left', 'top'))
-    bg_t.pos = n * (WIDTH + 201), 0
+    bg_t.pos = n * (WIDTH+1), 0
     backgrounds_top.append(bg_t)
 
 #init des variables ECRANS (start, pause, mort)
@@ -151,7 +151,6 @@ def update(dt):
         dragon.animate()
 
         # hero update
-
 
         global hero_speed
 
