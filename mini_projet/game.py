@@ -22,6 +22,10 @@ hero = Actor("hero", anchor=('middle', 'bottom'))
 hero.pos = (64, GROUND)
 hero_speed = 3
 
+invincible = False
+invincible_timer = 0
+
+
 # enemies initialisations
 
 BOX_APPARTION = (2, 5)
@@ -103,7 +107,7 @@ def update(dt):
 
     # enemies update
     # box
-    global next_box_time, game_started, game_paused, game_over
+    global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer
     
     if game_started and not game_over and not game_paused:
 
@@ -120,6 +124,8 @@ def update(dt):
             box.pos = x, y
             if box.colliderect(hero):
                 end_game()
+                invincible = True
+
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
@@ -127,8 +133,14 @@ def update(dt):
 
         # hero update
 
+
         global hero_speed
 
+        if invincible :
+            invincible_timer -= dt
+            if invincible_timer <= 0:
+                invincible = False
+                
         hero_speed -= GRAVITY * dt
         x, y = hero.pos
         y -= hero_speed * dt
