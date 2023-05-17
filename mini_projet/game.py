@@ -26,6 +26,10 @@ hero_speed = 3
 hero.images = ["chara_walking", "chara_walking_1"]
 hero.fps = 5
 
+invincible = False
+invincible_timer = 0
+
+
 # enemies initialisations
 
 BOX_APPARTION = (2, 5)
@@ -63,10 +67,12 @@ game_over = False
 # fonction pour déclancher les ECRANS (start, pause, game over)
 
 def start_game():
-    global game_started, game_paused, game_over
+    global game_started, game_paused, game_over, boxes, next_box_time
     game_started = True
     game_paused = False
     game_over = False
+    boxes = []
+    next_box_time = randint(BOX_APPARTION[0], BOX_APPARTION[1])
 
 def pause():
     global game_paused
@@ -85,7 +91,7 @@ def draw():
     global game_paused, game_started, game_over
     screen.clear()
 
-        # ECRAN START: ici mettre un ecran joli
+    # ECRAN START: ici mettre un ecran joli
     if not game_started:
         screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
 
@@ -116,9 +122,13 @@ def update(dt):
 
     # enemies update
     # box
+<<<<<<< HEAD
 
     global next_box_time, game_started, game_paused, game_over
     
+=======
+    global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer
+>>>>>>> bfda0ad1d27d51e3291f70ba2a368dccdce552c1
     
     if game_started and not game_over and not game_paused:
 
@@ -136,6 +146,8 @@ def update(dt):
             box.pos = x, y
             if box.colliderect(hero):
                 end_game()
+                invincible = True
+
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
@@ -145,8 +157,14 @@ def update(dt):
 
         # hero update
 
+
         global hero_speed
 
+        if invincible :
+            invincible_timer -= dt
+            if invincible_timer <= 0:
+                invincible = False
+                
         hero_speed -= GRAVITY * dt
         x, y = hero.pos
         y -= hero_speed * dt
@@ -187,9 +205,7 @@ def on_key_down(key):
 
     # start and pause the game
     if key == keys.RETURN:
-        if not game_started:
-            start_game()
-        elif game_over:
+        if not game_started or game_over:
             start_game()
 
     if key == keys.ESCAPE:
