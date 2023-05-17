@@ -4,7 +4,10 @@ from argparse import Action
 from random import randint
 from tkinter import ANCHOR
 import pgzrun
+import pygame
+from pygame import mixer
 
+crash_sound = pygame.mixer.Sound("bang_sound.ogg")
 
 WIDTH = 800
 HEIGHT = 600
@@ -125,7 +128,7 @@ def update(dt):
             if box.colliderect(hero):
                 end_game()
                 invincible = True
-
+                pygame.mixer.Sound.play(crash_sound)
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
