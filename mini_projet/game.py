@@ -16,6 +16,7 @@ GRAVITY = 200
 NUMBER_OF_BACKGROUND = 2
 GAME_SPEED = 200
 JUMP_SPEED = 200
+jumping = False
 
 # hero initialisation
 
@@ -29,7 +30,6 @@ hero.fps = 5
 invincible = False
 invincible_timer = 0
 
-
 # enemies initialisations
 
 BOX_APPARTION = (2, 5)
@@ -39,7 +39,7 @@ boxes = []
 # dragon initialisation
 
 dragon = Actor("frame-1")
-dragon.pos = (400, 300)
+dragon.pos = (WIDTH + 50, randint (200,500))
 dragon.scale = 0.15
 dragon.images = ["frame-1", "frame-2", "frame-3", "frame-4"]
 dragon.fps = 5
@@ -122,13 +122,7 @@ def update(dt):
 
     # enemies update
     # box
-<<<<<<< HEAD
-
-    global next_box_time, game_started, game_paused, game_over
-    
-=======
     global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer
->>>>>>> bfda0ad1d27d51e3291f70ba2a368dccdce552c1
     
     if game_started and not game_over and not game_paused:
 
@@ -148,12 +142,14 @@ def update(dt):
                 end_game()
                 invincible = True
 
-
         if boxes:
             if boxes[0].pos[0] <= - 32:
                 boxes.pop(0)
 
         dragon.animate()
+        dragon.x -= GAME_SPEED * dt
+        if dragon.x <= -40:
+            dragon.x = WIDTH + 40
 
         # hero update
 
@@ -216,5 +212,6 @@ def on_key_down(key):
     if key == keys.SPACE:
         if hero_speed <= 0:
             hero_speed = JUMP_SPEED
+                
 
 pgzrun.go()
