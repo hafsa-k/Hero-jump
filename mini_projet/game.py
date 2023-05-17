@@ -8,17 +8,14 @@ import pgzrun
 from pgzhelper import *
 
 
-<<<<<<< HEAD
-=======
 # init sounds
 music = "ingame_music.mp3"
 music_dead = "udead_music.mp3"
-sound_cri = "Heroine_scream.ogg"
-sound_cri_colli_dragon = pygame.mixer.Sound(sound_cri)
-sound_bang = "Bang_sound.ogg"
-sound_bang_colli_egg = pygame.mixer.Sound (sound_bang)
+# sound_cri = "Heroine_scream.ogg"
+# sound_cri_colli_dragon = pygame.mixer.Sound(sound_cri)
+# sound_bang = "Bang_sound.ogg"
+# sound_bang_colli_egg = pygame.mixer.Sound (sound_bang)
 
->>>>>>> d9fa042c18e0a406a231611a9b91647f955c8b07
 WIDTH = 800
 HEIGHT = 600
 
