@@ -25,7 +25,6 @@ GRAVITY = 200
 NUMBER_OF_BACKGROUND = 2
 GAME_SPEED = 200
 JUMP_SPEED = 200
-jumping = False
 
 # background initialisation
 
@@ -42,7 +41,7 @@ hero.images = ["chara_walking", "chara_walking_1"]
 hero.fps = 5
 
 invincible = False
-invincible_timer = 0
+# invincible_timer = 1
 
 
 # life initialisation
@@ -121,7 +120,8 @@ def pause():
 def end_game():
     global game_over
     game_over = True
-    #music.play(music_dead)
+    
+
 
 # def restart_game():
 #     global game_started, game_over
@@ -136,7 +136,7 @@ def draw():
     if not game_started:
         start_screen.draw()
         # screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
-
+        
     # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
     elif game_paused:
         screen.draw.text("Pause", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
@@ -165,6 +165,7 @@ def draw():
             coeur.draw()
         dragon.draw()
 
+
 def update(dt):
 
     # enemies update
@@ -188,12 +189,14 @@ def update(dt):
             x, y = box.pos
             x -= GAME_SPEED * dt
             box.pos = x, y
-            if box.colliderect(hero):
+            if box.colliderect(hero) or hero.colliderect(dragon) and not invincible:
+                print(coeurs)
                 pygame.mixer.Sound.play(sound_bang_colli_egg)
                 coeurs -= 1
+                lives.remove(lives[-1])
                 invincible = True
+                invincible_timer = 1
                 if coeurs == 0:
-                    
                     end_game()
 
 
@@ -202,9 +205,10 @@ def update(dt):
                 boxes.pop(0)
 
         dragon.animate()
-        dragon.x -= GAME_SPEED * dt
+        dragon.x -= (GAME_SPEED * 1.30) * dt
         if dragon.x <= -40:
             dragon.x = WIDTH + 40
+            dragon.y = randint (300, 400)
 
         # hero update
 
@@ -264,6 +268,7 @@ def on_key_down(key):
 
     # jump
     if key == keys.SPACE:
+        jumping = True
         if hero_speed <= 0:
             hero_speed = JUMP_SPEED
                 
