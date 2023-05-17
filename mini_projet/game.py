@@ -1,10 +1,10 @@
 # game data
 
-from pgzhelper import*
 from argparse import Action
 from random import randint
 from tkinter import ANCHOR
 import pgzrun
+from pgzhelper import*
 
 
 WIDTH = 800
