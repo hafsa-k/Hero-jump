@@ -17,6 +17,11 @@ NUMBER_OF_BACKGROUND = 2
 GAME_SPEED = 200
 JUMP_SPEED = 200
 
+# background initialisation
+
+start_screen = Actor("start_game", anchor =["left", "top"])
+game_over_screen = Actor("game_over", anchor =["left", "top"])
+
 # hero initialisation
 
 hero = Actor("chara_walking")
@@ -93,7 +98,8 @@ def draw():
 
     # ECRAN START: ici mettre un ecran joli
     if not game_started:
-        screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
+        start_screen.draw()
+        # screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
 
     # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
     elif game_paused:
@@ -101,7 +107,8 @@ def draw():
 
     # ECRAN GAME OVER: ici mettre un ecran joli
     elif game_over:
-        screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
+        game_over_screen.draw()
+        # screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
     
     # ECRAN de jeu 
     else:
