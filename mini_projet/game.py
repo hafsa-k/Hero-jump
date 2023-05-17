@@ -4,23 +4,32 @@ from argparse import Action
 from random import randint
 from tkinter import ANCHOR
 import pgzrun
+from pgzhelper import *
 
 
 WIDTH = 800
 HEIGHT = 600
 
-GROUND = 458
+GROUND = 490
 GRAVITY = 200
 
 NUMBER_OF_BACKGROUND = 2
 GAME_SPEED = 200
 JUMP_SPEED = 200
 
+# background initialisation
+
+start_screen = Actor("start_game", anchor =["left", "top"])
+game_over_screen = Actor("game_over", anchor =["left", "top"])
+
 # hero initialisation
 
-hero = Actor("hero", anchor=('middle', 'bottom'))
+hero = Actor("chara_walking")
 hero.pos = (64, GROUND)
+hero.scale = 0.3
 hero_speed = 3
+hero.images = ["chara_walking", "chara_walking_1"]
+hero.fps = 5
 
 invincible = False
 invincible_timer = 0
@@ -56,18 +65,26 @@ BOX_APPARTION = (2, 5)
 next_box_time = randint(BOX_APPARTION[0], BOX_APPARTION[1])
 boxes = []
 
+# dragon initialisation
+
+dragon = Actor("frame-1")
+dragon.pos = (400, 300)
+dragon.scale = 0.15
+dragon.images = ["frame-1", "frame-2", "frame-3", "frame-4"]
+dragon.fps = 5
+
 # background inititalisation
 
 backgrounds_bottom = []
 backgrounds_top = []
 
 for n in range(NUMBER_OF_BACKGROUND):
-    bg_b = Actor("bg_1", anchor=('left', 'top'))
+    bg_b = Actor("bg_bottom", anchor=('left', 'top'))
     bg_b.pos = n * WIDTH, 0
     backgrounds_bottom.append(bg_b)
 
-    bg_t = Actor("bg_2", anchor=('left', 'top'))
-    bg_t.pos = n * WIDTH, 0
+    bg_t = Actor("bg_top", anchor=('left', 'top'))
+    bg_t.pos = n * (WIDTH+1), 0
     backgrounds_top.append(bg_t)
 
 #init des variables ECRANS (start, pause, mort)
@@ -77,6 +94,7 @@ game_paused = False
 game_over = False
 
 # fonction pour déclancher les ECRANS (start, pause, game over)
+
 def start_game():
     global game_started, game_paused, game_over, boxes, next_box_time
     game_started = True
@@ -104,7 +122,8 @@ def draw():
 
     # ECRAN START: ici mettre un ecran joli
     if not game_started:
-        screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
+        start_screen.draw()
+        # screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
 
     # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
     elif game_paused:
@@ -112,10 +131,12 @@ def draw():
 
     # ECRAN GAME OVER: ici mettre un ecran joli
     elif game_over:
-        screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
+        game_over_screen.draw()
+        # screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
     
     # ECRAN de jeu 
     else:
+        screen.fill(color = "white")
         for bg in backgrounds_bottom:
             bg.draw()
 
@@ -130,19 +151,22 @@ def draw():
             dead_life.draw()
         for coeur in lives:
             coeur.draw()
+        dragon.draw()
 
 def update(dt):
 
     # enemies update
     # box
+
     global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer, coeurs
-    
+
     if game_started and not game_over and not game_paused:
 
         next_box_time -= dt
         if next_box_time <= 0:
-            box = Actor("box", anchor=('left', 'bottom'))
+            box = Actor("obstacles")
             box.pos = WIDTH, GROUND
+            box.scale = 0.5
             boxes.append(box)
             next_box_time = randint(BOX_APPARTION[0], BOX_APPARTION[1])
 
@@ -162,8 +186,9 @@ def update(dt):
             if boxes[0].pos[0] <= - 32:
                 boxes.pop(0)
 
-        # hero update
+        dragon.animate()
 
+        # hero update
 
         global hero_speed
 
@@ -181,6 +206,8 @@ def update(dt):
             hero_speed = 0
 
         hero.pos = x, y
+
+        hero.animate()
 
         # bg update
 
