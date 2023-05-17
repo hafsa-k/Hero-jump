@@ -186,13 +186,10 @@ def update(dt):
             if box.colliderect(hero):
                 coeurs -= 1
                 invincible = True
-<<<<<<< HEAD
                 if coeurs == 0:
                     
                     end_game()
-=======
                 pygame.mixer.Sound.play(crash_sound)
->>>>>>> music
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
