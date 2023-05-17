@@ -18,6 +18,11 @@ GAME_SPEED = 200
 JUMP_SPEED = 200
 jumping = False
 
+# background initialisation
+
+start_screen = Actor("start_game", anchor =["left", "top"])
+game_over_screen = Actor("game_over", anchor =["left", "top"])
+
 # hero initialisation
 
 hero = Actor("chara_walking")
@@ -30,6 +35,31 @@ hero.fps = 5
 invincible = False
 invincible_timer = 0
 
+
+# life initialisation
+
+lives = []
+coeurs = 3
+dead = []
+dead_heart = 3
+
+# RESIZE LES COEURS ICI HELP HELP ALERT
+
+life = Actor("heart_on")
+life.scale = 0.1
+
+for i in range(coeurs):
+    life = Actor("heart_on")
+    life.pos = (90*(i+1),50)
+    lives.append(life)
+
+dead_life = Actor("heart_off")
+dead_life.scale = 0.1
+
+for i in range(dead_heart):
+    dead_life = Actor("heart_off")
+    dead_life.pos = (90*(i+1),50)
+    dead.append(dead_life)
 # enemies initialisations
 
 BOX_APPARTION = (2, 5)
@@ -55,7 +85,7 @@ for n in range(NUMBER_OF_BACKGROUND):
     backgrounds_bottom.append(bg_b)
 
     bg_t = Actor("bg_top", anchor=('left', 'top'))
-    bg_t.pos = n * (WIDTH + 201), 0
+    bg_t.pos = n * (WIDTH+1), 0
     backgrounds_top.append(bg_t)
 
 #init des variables ECRANS (start, pause, mort)
@@ -93,7 +123,8 @@ def draw():
 
     # ECRAN START: ici mettre un ecran joli
     if not game_started:
-        screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
+        start_screen.draw()
+        # screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
 
     # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
     elif game_paused:
@@ -101,7 +132,8 @@ def draw():
 
     # ECRAN GAME OVER: ici mettre un ecran joli
     elif game_over:
-        screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
+        game_over_screen.draw()
+        # screen.draw.text("GAME OVER", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
     
     # ECRAN de jeu 
     else:
@@ -116,14 +148,21 @@ def draw():
             box.draw()
 
         hero.draw()
+        for dead_life in dead:
+            dead_life.draw()
+        for coeur in lives:
+            coeur.draw()
         dragon.draw()
 
 def update(dt):
 
     # enemies update
     # box
-    global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer
-    
+
+
+    global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer, coeurs
+
+
     if game_started and not game_over and not game_paused:
 
         next_box_time -= dt
@@ -139,8 +178,11 @@ def update(dt):
             x -= GAME_SPEED * dt
             box.pos = x, y
             if box.colliderect(hero):
-                end_game()
+                coeurs -= 1
                 invincible = True
+                if coeurs == 0:
+                    
+                    end_game()
 
         if boxes:
             if boxes[0].pos[0] <= - 32:
@@ -152,7 +194,6 @@ def update(dt):
             dragon.x = WIDTH + 40
 
         # hero update
-
 
         global hero_speed
 
