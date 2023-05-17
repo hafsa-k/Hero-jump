@@ -32,7 +32,7 @@ hero.images = ["chara_walking", "chara_walking_1"]
 hero.fps = 5
 
 invincible = False
-invincible_timer = 0
+# invincible_timer = 1
 
 
 # life initialisation
@@ -153,6 +153,7 @@ def draw():
             coeur.draw()
         dragon.draw()
 
+
 def update(dt):
 
     # enemies update
@@ -174,9 +175,12 @@ def update(dt):
             x, y = box.pos
             x -= GAME_SPEED * dt
             box.pos = x, y
-            if box.colliderect(hero):
+            if box.colliderect(hero) and not invincible:
+                print(coeurs)
                 coeurs -= 1
+                lives.remove(lives[-1])
                 invincible = True
+                invincible_timer = 1
                 if coeurs == 0:
                     
                     end_game()
