@@ -16,7 +16,6 @@ GRAVITY = 200
 NUMBER_OF_BACKGROUND = 2
 GAME_SPEED = 200
 JUMP_SPEED = 200
-jumping = False
 
 # background initialisation
 
@@ -177,11 +176,10 @@ def update(dt):
             x, y = box.pos
             x -= GAME_SPEED * dt
             box.pos = x, y
-            if box.colliderect(hero):
+            if box.colliderect(hero) or hero.colliderect(dragon):
                 coeurs -= 1
                 invincible = True
                 if coeurs == 0:
-                    
                     end_game()
 
         if boxes:
@@ -189,9 +187,10 @@ def update(dt):
                 boxes.pop(0)
 
         dragon.animate()
-        dragon.x -= GAME_SPEED * dt
+        dragon.x -= (GAME_SPEED * 1.30) * dt
         if dragon.x <= -40:
             dragon.x = WIDTH + 40
+            dragon.y = randint (300, 400)
 
         # hero update
 
@@ -251,6 +250,7 @@ def on_key_down(key):
 
     # jump
     if key == keys.SPACE:
+        jumping = True
         if hero_speed <= 0:
             hero_speed = JUMP_SPEED
                 
