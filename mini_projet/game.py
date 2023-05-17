@@ -110,6 +110,7 @@ def end_game():
     global game_over
     game_over = True
 
+
 # def restart_game():
 #     global game_started, game_over
 #     game_started = True
@@ -123,7 +124,7 @@ def draw():
     if not game_started:
         start_screen.draw()
         # screen.draw.text("Press ENTER to start the game", (WIDTH/5, HEIGHT/2), color="white", fontsize=60)
-
+        
     # ECRAN DE PAUSE : mettre ici un ecran de pause joli (juste apres le if game_paused)
     elif game_paused:
         screen.draw.text("Pause", (WIDTH/2, HEIGHT/2), color="white", fontsize=60)
