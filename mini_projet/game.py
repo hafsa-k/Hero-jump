@@ -4,9 +4,21 @@ from argparse import Action
 from random import randint
 from tkinter import ANCHOR
 import pgzrun
+
 from pgzhelper import *
 
 
+<<<<<<< HEAD
+=======
+# init sounds
+music = "ingame_music.mp3"
+music_dead = "udead_music.mp3"
+sound_cri = "Heroine_scream.ogg"
+sound_cri_colli_dragon = pygame.mixer.Sound(sound_cri)
+sound_bang = "Bang_sound.ogg"
+sound_bang_colli_egg = pygame.mixer.Sound (sound_bang)
+
+>>>>>>> d9fa042c18e0a406a231611a9b91647f955c8b07
 WIDTH = 800
 HEIGHT = 600
 
@@ -102,6 +114,7 @@ def start_game():
     game_over = False
     boxes = []
     next_box_time = randint(BOX_APPARTION[0], BOX_APPARTION[1])
+    #music.play(music)
 
 def pause():
     global game_paused
@@ -110,6 +123,7 @@ def pause():
 def end_game():
     global game_over
     game_over = True
+    
 
 # def restart_game():
 #     global game_started, game_over
@@ -177,6 +191,7 @@ def update(dt):
             box.pos = x, y
             if box.colliderect(hero) and not invincible:
                 print(coeurs)
+                pygame.mixer.Sound.play(sound_bang_colli_egg)
                 coeurs -= 1
                 lives.remove(lives[-1])
                 invincible = True
