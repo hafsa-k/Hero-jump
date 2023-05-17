@@ -26,6 +26,30 @@ invincible = False
 invincible_timer = 0
 
 
+# life initialisation
+
+lives = []
+coeurs = 3
+dead = []
+dead_heart = 3
+
+# RESIZE LES COEURS ICI HELP HELP ALERT
+
+life = Actor("heart_on")
+life.scale = 0.1
+
+for i in range(coeurs):
+    life = Actor("heart_on")
+    life.pos = (90*(i+1),50)
+    lives.append(life)
+
+dead_life = Actor("heart_off")
+dead_life.scale = 0.1
+
+for i in range(dead_heart):
+    dead_life = Actor("heart_off")
+    dead_life.pos = (90*(i+1),50)
+    dead.append(dead_life)
 # enemies initialisations
 
 BOX_APPARTION = (2, 5)
@@ -102,12 +126,16 @@ def draw():
             box.draw()
 
         hero.draw()
+        for dead_life in dead:
+            dead_life.draw()
+        for coeur in lives:
+            coeur.draw()
 
 def update(dt):
 
     # enemies update
     # box
-    global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer
+    global next_box_time, game_started, game_paused, game_over,invincible, invincible_timer, coeurs
     
     if game_started and not game_over and not game_paused:
 
@@ -123,8 +151,11 @@ def update(dt):
             x -= GAME_SPEED * dt
             box.pos = x, y
             if box.colliderect(hero):
-                end_game()
+                coeurs -= 1
                 invincible = True
+                if coeurs == 0:
+                    
+                    end_game()
 
 
         if boxes:
